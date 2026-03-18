@@ -10,7 +10,7 @@ namespace ChatSystem.Core.Entities
 
         public int ChatId { get; set; }
 
-        public int SenderId { get; set; }
+        public string SenderId { get; set; }
 
         public string Content { get; set; }
 

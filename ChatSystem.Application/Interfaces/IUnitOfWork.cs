@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ChatSystem.Core.Interfaces
+namespace ChatSystem.Application.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {

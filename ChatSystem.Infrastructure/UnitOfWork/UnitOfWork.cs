@@ -1,5 +1,5 @@
-﻿using ChatSystem.Core.Entities;
-using ChatSystem.Core.Interfaces;
+﻿using ChatSystem.Application.Interfaces;
+using ChatSystem.Core.Entities;
 using ChatSystem.Infrastructure.Data;
 using ChatSystem.Infrastructure.Repositories;
 using System;

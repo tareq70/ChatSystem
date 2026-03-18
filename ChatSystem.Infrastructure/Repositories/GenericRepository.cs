@@ -1,4 +1,4 @@
-﻿using ChatSystem.Core.Interfaces;
+﻿using ChatSystem.Application.Interfaces;
 using ChatSystem.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace ChatSystem.Core.Interfaces
+namespace ChatSystem.Application.Interfaces
 {
     public interface IGenericRepository <T> where T : class
     {
