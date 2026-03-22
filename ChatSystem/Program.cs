@@ -2,6 +2,7 @@ using ChatSystem.Application.Interfaces;
 using ChatSystem.Application.Services;
 using ChatSystem.Core.Entities;
 using ChatSystem.Infrastructure.Data;
+using ChatSystem.Infrastructure.Hubs;
 using ChatSystem.Infrastructure.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -44,12 +45,19 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
     };
 
-    //  Cookie
+   
     options.Events = new JwtBearerEvents
     {
         OnMessageReceived = context =>
         {
-            context.Token = context.Request.Cookies["jwt"];
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+                context.Token = accessToken;
+            else
+                context.Token = context.Request.Cookies["jwt"];
+
             return Task.CompletedTask;
         }
     };
@@ -57,6 +65,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")) 
 );
+builder.Services.AddSignalR();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
@@ -91,5 +100,5 @@ app.MapControllerRoute(
     pattern: "{controller=Auth}/{action=Register}/{id?}")
     .WithStaticAssets();
 
-
+app.MapHub<PresenceHub>("/hubs/presence");
 app.Run();

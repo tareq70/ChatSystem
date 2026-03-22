@@ -190,6 +190,46 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/hubs/presence")
+            .withAutomaticReconnect()
+            .build();
+
+        connection.on("UserOnline", userId => {
+            console.log(userId + " is online");
+        });
+
+        connection.on("UserOffline", userId => {
+            console.log(userId + " is offline");
+        });
+
+                  document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                await connection.start();
+                console.log('SignalR connected');
+
+                const badge = document.querySelector('.pf-online-badge');
+                const dot   = document.querySelector('.pf-status-dot');
+                const lastSeenRow = document.getElementById('lastSeenRow');
+
+                if (badge) {
+                    badge.className = 'pf-online-badge online';
+                    badge.innerHTML = '<div class="pf-online-badge-dot"></div> Online';
+                }
+                if (dot) {
+                    dot.className = 'pf-status-dot online';
+                }
+                if (lastSeenRow) {
+                    lastSeenRow.style.display = 'none';
+                }
+
+            } catch (err) {
+                console.error('SignalR error:', err);
+            }
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>

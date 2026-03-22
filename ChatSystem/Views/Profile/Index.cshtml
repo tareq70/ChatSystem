@@ -316,7 +316,8 @@
         <div class="pf-divider"></div>
 
         <!-- Info -->
-        <div class="pf-info-row">
+        <div class="pf-info-row" id="lastSeenRow"
+             style="@(Model.Status == ChatSystem.Core.Enums.UserStatus.Online ? "display:none;" : "")">
             <span class="pf-info-lbl">Last seen</span>
             <span class="pf-info-val">
                 @{
