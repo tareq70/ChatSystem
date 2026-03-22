@@ -48,5 +48,10 @@ namespace ChatSystem.Infrastructure.Repositories
                 .Where(predicate)
                 .ToListAsync();
         }
+
+        public IQueryable<T> GetQueryable()
+        {
+            return _context.Set<T>().AsQueryable();
+        }
     }
 }

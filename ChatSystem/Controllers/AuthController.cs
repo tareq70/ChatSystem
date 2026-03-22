@@ -1,4 +1,4 @@
-﻿using ChatSystem.Application.DTOs;
+﻿using ChatSystem.Application.DTOs.Auth;
 using ChatSystem.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -69,7 +69,7 @@ namespace ChatSystem.Controllers
                 Expires = DateTimeOffset.UtcNow.AddDays(7)
             });
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Profile");
         }
 
         // Verify OTP  (Register flow + Forgot Password flow)

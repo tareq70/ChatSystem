@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace ChatSystem.Application.DTOs
+namespace ChatSystem.Application.DTOs.Auth
 {
     public class LoginDto
     {

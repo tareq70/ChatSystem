@@ -1,4 +1,4 @@
-﻿using ChatSystem.Application.DTOs;
+﻿using ChatSystem.Application.DTOs.Auth;
 using ChatSystem.Application.Interfaces;
 using ChatSystem.Core.Entities;
 using ChatSystem.Core.Enums;

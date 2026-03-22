@@ -11,6 +11,7 @@ namespace ChatSystem.Core.Entities
         public string? ProfileImage { get; set; }
 
         public UserStatus Status { get; set; } = UserStatus.Offline;
+        public DateTime? LastSeen { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

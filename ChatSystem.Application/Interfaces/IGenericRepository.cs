@@ -18,5 +18,6 @@ namespace ChatSystem.Application.Interfaces
         void Delete(T entity);
 
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
+        IQueryable<T> GetQueryable();
     }
 }

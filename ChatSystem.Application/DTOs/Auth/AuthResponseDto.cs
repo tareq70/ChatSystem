@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ChatSystem.Application.DTOs
+namespace ChatSystem.Application.DTOs.Auth
 {
     public class AuthResponseDto
     {
