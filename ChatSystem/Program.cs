@@ -69,6 +69,7 @@ builder.Services.AddSignalR();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IUserSearchService, UserSearchService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 
 var app = builder.Build();

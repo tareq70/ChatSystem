@@ -140,6 +140,48 @@
                 padding: 7px 10px;
             }
         }
+
+        /*Search*/
+
+        .nav-search {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 6px 12px;
+            transition: border 0.15s;
+        }
+
+            .nav-search:focus-within {
+                border-color: #1d4ed8;
+                background: #fff;
+            }
+
+            .nav-search svg {
+                width: 15px;
+                height: 15px;
+                stroke: #94a3b8;
+                fill: none;
+                stroke-width: 2;
+                stroke-linecap: round;
+                flex-shrink: 0;
+            }
+
+            .nav-search input {
+                border: none;
+                background: none;
+                outline: none;
+                font-size: 13px;
+                font-family: 'Outfit', sans-serif;
+                color: #0f172a;
+                width: 180px;
+            }
+
+                .nav-search input::placeholder {
+                    color: #94a3b8;
+                }
     </style>
     @await RenderSectionAsync("Styles", required: false)
 </head>
@@ -152,6 +194,10 @@
             </div>
             <span class="nav-logo-name">Chatk</span>
         </a>
+   
+       
+
+        <div class="nav-divider"></div>
 
         <div class="nav-links">
             <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Chat" ? "active" : "")"
@@ -171,6 +217,16 @@
                 <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
                 <span>Profile</span>
             </a>
+
+
+            <form method="get" asp-controller="Search" asp-action="Index" style="margin:0">
+                <div class="nav-search">
+                    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+                    <input type="text" name="q"
+                           value="@Context.Request.Query["q"]"
+                           placeholder="Search..." />
+                </div>
+            </form>
 
             <div class="nav-divider"></div>
 
@@ -228,6 +284,9 @@
             } catch (err) {
                 console.error('SignalR error:', err);
             }
+        });
+                window.addEventListener('beforeunload', async () => {
+            await connection.stop();
         });
     </script>
     @await RenderSectionAsync("Scripts", required: false)

@@ -26,6 +26,10 @@ namespace ChatSystem.Controllers
             var profile = await _profileService.GetProfileAsync(userId);
             return View(profile);
         }
+
+
+
+
         [HttpGet]
         public async Task<IActionResult> Edit()
         {
@@ -45,6 +49,8 @@ namespace ChatSystem.Controllers
 
             return View(dto);
         }
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
