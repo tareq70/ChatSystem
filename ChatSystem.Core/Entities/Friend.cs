@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChatSystem.Core.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -13,5 +14,9 @@ namespace ChatSystem.Core.Entities
         public string FriendId { get; set; }
 
         public DateTime CreatedAt { get; set; }
+
+        public FriendsStatus friendsStatus { get; set; } = FriendsStatus.Friend;
+        public FriendsStatus UserStatus { get; set; } = FriendsStatus.Friend;
+
     }
 }

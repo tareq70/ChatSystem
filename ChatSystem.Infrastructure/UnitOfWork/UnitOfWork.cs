@@ -37,6 +37,8 @@ namespace ChatSystem.Infrastructure.UnitOfWork
         public IGenericRepository<Message> Messages { get; private set; }
 
         public IGenericRepository<Notification> Notifications { get; private set; }
+
+
         public async Task<int> SaveAsync()
         {
             return await _context.SaveChangesAsync();

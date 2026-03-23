@@ -21,7 +21,8 @@ namespace ChatSystem.Infrastructure.Data
         public DbSet<Chat> Chats { get; set; }
         public DbSet<ChatUser> ChatUsers { get; set; }
         public DbSet<Message> Messages { get; set; }
-        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Notification> Notifications { get; set; }  
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -39,6 +40,14 @@ namespace ChatSystem.Infrastructure.Data
 
             modelBuilder.Entity<Chat>()
                 .Property(c => c.Type)
+                .HasConversion<int>();
+          
+            modelBuilder.Entity<Friend>()
+                .Property(f => f.friendsStatus)
+                .HasConversion<int>();
+
+            modelBuilder.Entity<Friend>()
+                .Property(f => f.UserStatus)
                 .HasConversion<int>();
 
             // FriendRequests relationships
@@ -99,8 +108,6 @@ namespace ChatSystem.Infrastructure.Data
                 .WithMany()
                 .HasForeignKey(n => n.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-          
         }
     }
 }
