@@ -1,0 +1,45 @@
+﻿@{
+    Layout = "~/Views/Shared/_AppLayout.cshtml";
+    ViewData["Title"] = "Create Group";
+}
+
+<div class="container py-4" style="max-width:500px">
+    <h5 class="fw-semibold mb-4">Create Group</h5>
+    <form asp-action="CreateGroup" enctype="multipart/form-data" method="post">
+        <div class="mb-3">
+            <label class="form-label">Group Name</label>
+            <input type="text" name="Name" class="form-control" required placeholder="e.g. Team Alpha" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Group Image (optional)</label>
+            <input type="file" name="GroupImage" class="form-control" accept="image/*" />
+        </div>
+        <div class="mb-4">
+            <label class="form-label">Add Friends</label>
+            <div id="friendsList" class="d-flex flex-column gap-2">
+                <!-- Populated via AJAX from friends list -->
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Create Group</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        // جلب قائمة الأصدقاء وعرضها كـ checkboxes
+        fetch('@Url.Action("GetFriends", "Friends")')
+            .then(r => r.json())
+            .then(friends => {
+                const container = document.getElementById("friendsList");
+                friends.forEach(f => {
+                    container.insertAdjacentHTML("beforeend", `
+                        <label class="d-flex align-items-center gap-2 p-2 rounded hover-bg" style="cursor:pointer">
+                            <input type="checkbox" name="MemberIds" value="${f.userId}" class="form-check-input m-0"/>
+                            <img src="${f.profileImage || 'https://ui-avatars.com/api/?name='+f.userName+'&background=random'}"
+                                 style="width:32px;height:32px;border-radius:50%;object-fit:cover" alt=""/>
+                            <span style="font-size:.9rem">${f.userName}</span>
+                        </label>`);
+                });
+            });
+    </script>
+}

@@ -1,0 +1,354 @@
+﻿@model ChatSystem.Application.DTOs.User_Profile.UserProfileDTO
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "_AppLayout";
+}
+
+@section Styles {
+    <style>
+        @@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@@400;500;600;700;800&display=swap');
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            background: #f0f4f8;
+            padding: 0;
+            margin: 0;
+        }
+
+        .pf-card {
+            background: #fff;
+            border-radius: 0;
+            width: 100%;
+            max-width: 100%;
+            min-height: 100vh;
+            box-shadow: none;
+        }
+
+        /* ── Banner ── */
+        .pf-banner {
+            height: 110px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 55%, #1d4ed8 100%);
+            position: relative;
+        }
+
+            .pf-banner::before {
+                content: '';
+                position: absolute;
+                width: 180px;
+                height: 180px;
+                border-radius: 50%;
+                background: rgba(59,130,246,0.12);
+                top: -60px;
+                right: -40px;
+            }
+
+            .pf-banner::after {
+                content: '';
+                position: absolute;
+                width: 120px;
+                height: 120px;
+                border-radius: 50%;
+                background: rgba(29,78,216,0.15);
+                bottom: -10px;
+                left: -70px;
+            }
+
+        /* ── Avatar ── */
+        .pf-avatar-wrap {
+            position: absolute;
+            bottom: -40px;
+            left: 28px;
+        }
+
+        .pf-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1d4ed8, #60a5fa);
+            border: 4px solid #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(29,78,216,0.25);
+        }
+
+            .pf-avatar img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .pf-status-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            border: 2.5px solid #fff;
+            position: absolute;
+            bottom: 4px;
+            right: 2px;
+        }
+
+            .pf-status-dot.online {
+                background: #22c55e;
+            }
+
+            .pf-status-dot.offline {
+                background: #94a3b8;
+            }
+
+        /* ── Edit icon ── */
+        .pf-edit-icon {
+            position: absolute;
+            bottom: -4px;
+            right: -4px;
+            width: 28px;
+            height: 28px;
+            background: #1d4ed8;
+            border-radius: 50%;
+            border: 2.5px solid #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-decoration: none;
+        }
+
+            .pf-edit-icon:hover {
+                background: #1e3a5f;
+            }
+
+            .pf-edit-icon svg {
+                width: 13px;
+                height: 13px;
+                stroke: #fff;
+                fill: none;
+                stroke-width: 2;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+            }
+
+        /* ── Body ── */
+        .pf-body {
+            padding: 52px 28px 24px;
+        }
+
+        .pf-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .pf-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 2px;
+        }
+
+        .pf-email {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        /* ── Online badge ── */
+        .pf-online-badge {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+            .pf-online-badge.online {
+                background: #f0fdf4;
+                border: 1px solid #bbf7d0;
+                color: #15803d;
+            }
+
+            .pf-online-badge.offline {
+                background: #f8fafc;
+                border: 1px solid #e2e8f0;
+                color: #64748b;
+            }
+
+        .pf-online-badge-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+        }
+
+        .pf-online-badge.online .pf-online-badge-dot {
+            background: #22c55e;
+        }
+
+        .pf-online-badge.offline .pf-online-badge-dot {
+            background: #94a3b8;
+        }
+
+        /* ── Stats ── */
+        .pf-stats {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .pf-stat {
+            flex: 1;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 14px;
+            text-align: center;
+            border: 1px solid #f1f5f9;
+        }
+
+        .pf-stat-val {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .pf-stat-lbl {
+            font-size: 11px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 2px;
+        }
+
+        /* ── Info rows ── */
+        .pf-divider {
+            height: 1px;
+            background: #f1f5f9;
+            margin: 4px 0 16px;
+        }
+
+        .pf-info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 9px 0;
+            font-size: 13px;
+            border-bottom: 1px solid #f8fafc;
+        }
+
+            .pf-info-row:last-of-type {
+                border-bottom: none;
+            }
+
+        .pf-info-lbl {
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .pf-info-val {
+            color: #0f172a;
+            font-weight: 600;
+        }
+    </style>
+}
+
+<div class="pf-card">
+
+    <!-- Banner -->
+    <div class="pf-banner">
+        <div class="pf-avatar-wrap">
+            <div class="pf-avatar">
+                @if (!string.IsNullOrEmpty(Model.ProfileImage))
+                {
+                    <img src="@Model.ProfileImage" alt="@Model.UserName" />
+                }
+                else
+                {
+                    @Model.UserName.Substring(0, 1).ToUpper()
+                }
+            </div>
+            <div class="pf-status-dot @(Model.Status == ChatSystem.Core.Enums.UserStatus.Online ? "online" : "offline")"></div>
+            <a asp-action="Edit" asp-controller="Profile" class="pf-edit-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                </svg>
+            </a>
+        </div>
+    </div>
+
+    <!-- Body -->
+    <div class="pf-body">
+
+        <div class="pf-header">
+            <div>
+                <p class="pf-name">@Model.UserName</p>
+                <p class="pf-email">@Model.Email</p>
+            </div>
+            <div class="pf-online-badge @(Model.Status == ChatSystem.Core.Enums.UserStatus.Online ? "online" : "offline")">
+                <div class="pf-online-badge-dot"></div>
+                @(Model.Status == ChatSystem.Core.Enums.UserStatus.Online ? "Online" : "Offline")
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="pf-stats">
+            <div class="pf-stat">
+                <div class="pf-stat-val">@Model.FriendsCount</div>
+                <div class="pf-stat-lbl">Friends</div>
+            </div>
+            <div class="pf-stat">
+                <div class="pf-stat-val">@Model.CreatedAt.ToString("MMM yyyy")</div>
+                <div class="pf-stat-lbl">Joined</div>
+            </div>
+        </div>
+
+        <div class="pf-divider"></div>
+
+        <!-- Info -->
+        <div class="pf-info-row" id="lastSeenRow"
+             style="@(Model.Status == ChatSystem.Core.Enums.UserStatus.Online ? "display:none;" : "")">
+            <span class="pf-info-lbl">Last seen</span>
+            <span class="pf-info-val">
+                @{
+                    var diff = DateTime.UtcNow - Model.LastSeen;
+                    if (diff.TotalMinutes < 1)
+                    {
+                        <text>Just now</text>
+                    }
+                    else if (diff.TotalMinutes < 60)
+                    {
+
+                        <text>@((int)diff.TotalMinutes)m ago</text>
+                    }
+                    else if (diff.TotalHours < 24)
+                    {
+
+                        <text>@((int)diff.TotalHours)h ago</text>
+                    }
+                    else
+                    {
+
+                        <text>@Model.LastSeen.ToString("MMM dd, yyyy")</text>
+                    }
+                }
+            </span>
+        </div>
+
+        <div class="pf-info-row">
+            <span class="pf-info-lbl">Member since</span>
+            <span class="pf-info-val">@Model.CreatedAt.ToString("MMMM dd, yyyy")</span>
+        </div>
+
+    </div>
+</div>

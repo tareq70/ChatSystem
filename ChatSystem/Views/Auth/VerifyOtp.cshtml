@@ -1,0 +1,470 @@
+﻿@model ChatSystem.Application.DTOs.Auth.VerifyOtpDto
+@{
+    ViewData["Title"] = "Verify Email";
+    Layout = "_AuthLayout";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Verify Email - ChatSystem</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+        @@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@@400;500;600;700;800&display=swap');
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+        }
+
+        /* ── Left Panel ── */
+        .rg-left {
+            flex: 1;
+            background: linear-gradient(160deg, #0f172a 0%, #1e3a5f 60%, #1d4ed8 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .rg-left::before {
+                content: '';
+                position: absolute;
+                width: 300px;
+                height: 300px;
+                border-radius: 50%;
+                background: rgba(59,130,246,0.12);
+                top: -80px;
+                right: -80px;
+            }
+
+            .rg-left::after {
+                content: '';
+                position: absolute;
+                width: 220px;
+                height: 220px;
+                border-radius: 50%;
+                background: rgba(29,78,216,0.18);
+                bottom: -60px;
+                left: -60px;
+            }
+
+        .rg-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .rg-logo-mark {
+            width: 40px;
+            height: 40px;
+            background: #3b82f6;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .rg-logo-mark svg {
+                width: 20px;
+                height: 20px;
+                fill: #fff;
+            }
+
+        .rg-logo-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .rg-left h2 {
+            font-size: 32px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 12px;
+            line-height: 1.25;
+            position: relative;
+            z-index: 1;
+        }
+
+        .rg-left p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.55);
+            line-height: 1.75;
+            position: relative;
+            z-index: 1;
+        }
+
+        .rg-bubbles {
+            display: flex;
+            gap: 10px;
+            margin-top: 2.5rem;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .rg-bubble {
+            background: rgba(59,130,246,0.18);
+            border: 1px solid rgba(59,130,246,0.35);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 12px;
+            color: #93c5fd;
+            font-weight: 500;
+        }
+
+        /* ── Right Panel ── */
+        .rg-right {
+            flex: 1;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .rg-form-wrap {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .rg-icon {
+            width: 52px;
+            height: 52px;
+            background: #eff6ff;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.4rem;
+        }
+
+            .rg-icon svg {
+                width: 26px;
+                height: 26px;
+                stroke: #1d4ed8;
+                fill: none;
+                stroke-width: 2;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+            }
+
+        .rg-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .rg-sub {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 1.8rem;
+            line-height: 1.6;
+        }
+
+        .rg-email-badge {
+            display: inline-block;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 1.8rem;
+        }
+
+        /* ── Errors ── */
+        .rg-errors {
+            background: #fef2f2;
+            border: 1.5px solid #fecaca;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 1.2rem;
+        }
+
+            .rg-errors ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            .rg-errors li {
+                font-size: 13px;
+                color: #dc2626;
+                padding: 2px 0;
+            }
+
+        .otp-wrap {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1.4rem;
+        }
+
+        .otp-input {
+            flex: 1;
+            height: 48px;
+            width: 44px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+            color: #0f172a;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            font-family: 'Outfit', sans-serif;
+            caret-color: #1d4ed8;
+        }
+
+            .otp-input:focus {
+                border-color: #1d4ed8;
+                box-shadow: 0 0 0 3px rgba(29,78,216,0.1);
+                background: #fff;
+            }
+
+            .otp-input.filled {
+                border-color: #1d4ed8;
+                background: #eff6ff;
+            }
+
+        /* Hidden real input for form submission */
+        #OtpCode {
+            display: none;
+        }
+
+        .field-validation-error {
+            font-size: 11px;
+            color: #ef4444;
+            display: block;
+            margin-top: 4px;
+        }
+
+        /* ── Button ── */
+        .rg-btn {
+            width: 100%;
+            background: linear-gradient(90deg, #1e3a5f, #1d4ed8);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 0.02em;
+            transition: opacity 0.2s;
+        }
+
+            .rg-btn:hover {
+                opacity: 0.88;
+            }
+
+            .rg-btn:active {
+                opacity: 0.75;
+            }
+
+        /* ── Resend ── */
+        .rg-resend {
+            text-align: center;
+            font-size: 13px;
+            color: #94a3b8;
+            margin-top: 1.2rem;
+        }
+
+            .rg-resend a {
+                color: #1d4ed8;
+                text-decoration: none;
+                font-weight: 600;
+            }
+
+        /* ── Timer ── */
+        .rg-timer {
+            text-align: center;
+            font-size: 12px;
+            color: #cbd5e1;
+            margin-top: 8px;
+        }
+
+        #countdown {
+            font-weight: 600;
+            color: #1d4ed8;
+        }
+
+        @@media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                overflow: auto;
+            }
+
+            .rg-left {
+                padding: 2rem 1.5rem;
+                flex: none;
+            }
+
+            .rg-right {
+                flex: none;
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Left Panel -->
+    <div class="rg-left">
+        <div class="rg-logo">
+            <div class="rg-logo-mark">
+                <svg viewBox="0 0 18 18"><path d="M9 0L18 9L9 18L0 9Z" /></svg>
+            </div>
+            <span class="rg-logo-name">Chatk</span>
+        </div>
+        <h2>One step away.</h2>
+        <p>We sent a 6-digit code to your email. Enter it below to verify your account.</p>
+        <div class="rg-bubbles">
+            <span class="rg-bubble">Expires in 10 min</span>
+            <span class="rg-bubble">6-digit code</span>
+            <span class="rg-bubble">Secure</span>
+        </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="rg-right">
+        <div class="rg-form-wrap">
+
+            <div class="rg-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M9 12l2 2 4-4" />
+                    <circle cx="12" cy="12" r="9" />
+                </svg>
+            </div>
+
+            <p class="rg-title">Verify your email</p>
+            <p class="rg-sub">Enter the 6-digit code sent to</p>
+            <span class="rg-email-badge">@(TempData["Email"] ?? "your email")</span>
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="rg-errors">
+                    <ul>
+                        @foreach (var error in ViewData.ModelState.Values
+                                            .SelectMany(v => v.Errors)
+                                            .Where(e => !string.IsNullOrEmpty(e.ErrorMessage)))
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <form asp-action="VerifyOtp" asp-controller="Auth" method="post" novalidate>
+                @Html.AntiForgeryToken()
+
+                <input asp-for="Email" type="hidden" />
+                <input asp-for="OtpCode" id="OtpCode" />
+
+                <!-- 6 individual boxes -->
+                <div class="otp-wrap">
+                    <input class="otp-input" type="text" maxlength="1" inputmode="numeric" />
+                    <input class="otp-input" type="text" maxlength="1" inputmode="numeric" />
+                    <input class="otp-input" type="text" maxlength="1" inputmode="numeric" />
+                    <input class="otp-input" type="text" maxlength="1" inputmode="numeric" />
+                    <input class="otp-input" type="text" maxlength="1" inputmode="numeric" />
+                    <input class="otp-input" type="text" maxlength="1" inputmode="numeric" />
+                </div>
+
+                <span asp-validation-for="OtpCode" class="field-validation-error"></span>
+
+                <button type="submit" class="rg-btn">Verify &rarr;</button>
+            </form>
+
+            <div class="rg-timer">
+                Code expires in <span id="countdown">10:00</span>
+            </div>
+
+            <p class="rg-resend">
+                Didn't receive a code?
+                <a asp-action="ResendOtp" asp-controller="Auth">Resend</a>
+            </p>
+
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script>
+        // ── OTP boxes logic ──
+        const boxes = document.querySelectorAll('.otp-input');
+        const hidden = document.getElementById('OtpCode');
+
+        boxes.forEach((box, i) => {
+            box.addEventListener('input', () => {
+                box.value = box.value.replace(/\D/g, '');
+                if (box.value && i < boxes.length - 1)
+                    boxes[i + 1].focus();
+                box.classList.toggle('filled', box.value !== '');
+                syncHidden();
+            });
+
+            box.addEventListener('keydown', e => {
+                if (e.key === 'Backspace' && !box.value && i > 0) {
+                    boxes[i - 1].focus();
+                    boxes[i - 1].value = '';
+                    boxes[i - 1].classList.remove('filled');
+                    syncHidden();
+                }
+            });
+
+            box.addEventListener('paste', e => {
+                const text = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+                text.split('').forEach((char, j) => {
+                    if (boxes[j]) {
+                        boxes[j].value = char;
+                        boxes[j].classList.add('filled');
+                    }
+                });
+                syncHidden();
+                e.preventDefault();
+            });
+        });
+
+        function syncHidden() {
+            hidden.value = Array.from(boxes).map(b => b.value).join('');
+        }
+
+        // ── Countdown timer ──
+        let seconds = 600;
+        const el = document.getElementById('countdown');
+
+        const timer = setInterval(() => {
+            seconds--;
+            const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+            const s = String(seconds % 60).padStart(2, '0');
+            el.textContent = `${m}:${s}`;
+            if (seconds <= 60) el.style.color = '#ef4444';
+            if (seconds <= 0) {
+                clearInterval(timer);
+                el.textContent = 'Expired';
+            }
+        }, 1000);
+    </script>
+
+</body>
+</html>

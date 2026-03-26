@@ -1,0 +1,402 @@
+﻿@model ChatSystem.Application.DTOs.Auth.LoginDto
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_AuthLayout";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - ChatSystem</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+        @@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@@400;500;600;700;800&display=swap');
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+        }
+
+        /* ── Left Panel ── */
+        .rg-left {
+            flex: 1;
+            background: linear-gradient(160deg, #0f172a 0%, #1e3a5f 60%, #1d4ed8 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .rg-left::before {
+                content: '';
+                position: absolute;
+                width: 300px;
+                height: 300px;
+                border-radius: 50%;
+                background: rgba(59,130,246,0.12);
+                top: -80px;
+                right: -80px;
+            }
+
+            .rg-left::after {
+                content: '';
+                position: absolute;
+                width: 220px;
+                height: 220px;
+                border-radius: 50%;
+                background: rgba(29,78,216,0.18);
+                bottom: -60px;
+                left: -60px;
+            }
+
+        .rg-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .rg-logo-mark {
+            width: 40px;
+            height: 40px;
+            background: #3b82f6;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .rg-logo-mark svg {
+                width: 20px;
+                height: 20px;
+                fill: #fff;
+            }
+
+        .rg-logo-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .rg-left h2 {
+            font-size: 32px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 12px;
+            line-height: 1.25;
+            position: relative;
+            z-index: 1;
+        }
+
+        .rg-left p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.55);
+            line-height: 1.75;
+            position: relative;
+            z-index: 1;
+        }
+
+        .rg-bubbles {
+            display: flex;
+            gap: 10px;
+            margin-top: 2.5rem;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .rg-bubble {
+            background: rgba(59,130,246,0.18);
+            border: 1px solid rgba(59,130,246,0.35);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 12px;
+            color: #93c5fd;
+            font-weight: 500;
+        }
+
+        /* ── Right Panel ── */
+        .rg-right {
+            flex: 1;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .rg-form-wrap {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .rg-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .rg-sub {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 1.8rem;
+        }
+
+        /* ── Validation Summary ── */
+        .rg-errors {
+            background: #fef2f2;
+            border: 1.5px solid #fecaca;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 1.2rem;
+        }
+
+            .rg-errors ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            .rg-errors li {
+                font-size: 13px;
+                color: #dc2626;
+                padding: 2px 0;
+            }
+
+        /* ── Fields ── */
+        .rg-field {
+            margin-bottom: 1rem;
+        }
+
+        .rg-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #475569;
+            display: block;
+            margin-bottom: 6px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .rg-input {
+            width: 100%;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            color: #0f172a;
+            font-size: 14px;
+            padding: 11px 14px;
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            font-family: 'Outfit', sans-serif;
+        }
+
+            .rg-input:focus {
+                border-color: #1d4ed8;
+                box-shadow: 0 0 0 3px rgba(29,78,216,0.1);
+                background: #fff;
+            }
+
+            .rg-input.input-validation-error {
+                border-color: #ef4444;
+            }
+
+            .rg-input::placeholder {
+                color: #cbd5e1;
+            }
+
+        .field-validation-error {
+            font-size: 11px;
+            color: #ef4444;
+            display: block;
+            margin-top: 4px;
+        }
+
+        /* ── Password wrap ── */
+        .rg-input-wrap {
+            position: relative;
+        }
+
+            .rg-input-wrap .rg-input {
+                padding-right: 42px;
+            }
+
+        .rg-eye {
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #cbd5e1;
+            font-size: 16px;
+            user-select: none;
+            transition: color 0.2s;
+        }
+
+            .rg-eye:hover {
+                color: #94a3b8;
+            }
+
+        /* ── Button ── */
+        .rg-btn {
+            width: 100%;
+            background: linear-gradient(90deg, #1e3a5f, #1d4ed8);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 0.4rem;
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 0.02em;
+            transition: opacity 0.2s;
+        }
+
+            .rg-btn:hover {
+                opacity: 0.88;
+            }
+
+            .rg-btn:active {
+                opacity: 0.75;
+            }
+
+        /* ── Footer ── */
+        .rg-footer {
+            text-align: center;
+            font-size: 13px;
+            color: #94a3b8;
+            margin-top: 1.2rem;
+        }
+
+            .rg-footer a {
+                color: #1d4ed8;
+                text-decoration: none;
+                font-weight: 600;
+            }
+
+        @@media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                overflow: auto;
+            }
+
+            .rg-left {
+                padding: 2rem 1.5rem;
+                flex: none;
+            }
+
+            .rg-right {
+                flex: none;
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Left Panel -->
+    <div class="rg-left">
+        <div class="rg-logo">
+            <div class="rg-logo-mark">
+                <svg viewBox="0 0 18 18"><path d="M9 0L18 9L9 18L0 9Z" /></svg>
+            </div>
+            <span class="rg-logo-name">Chatk</span>
+        </div>
+        <h2>Welcome back.</h2>
+        <p>Sign in to your account and pick up where you left off.</p>
+        <div class="rg-bubbles">
+            <span class="rg-bubble">Real-time chat</span>
+            <span class="rg-bubble">Secure</span>
+            <span class="rg-bubble">Free forever</span>
+        </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="rg-right">
+        <div class="rg-form-wrap">
+
+            <p class="rg-title">Sign in</p>
+            <p class="rg-sub">Enter your username or email to continue.</p>
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="rg-errors">
+                    <ul>
+                        @foreach (var error in ViewData.ModelState.Values
+                                            .SelectMany(v => v.Errors)
+                                            .Where(e => !string.IsNullOrEmpty(e.ErrorMessage)))
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    </ul>
+                </div>
+            }
+
+            <form asp-action="Login" asp-controller="Auth" method="post" novalidate>
+                @Html.AntiForgeryToken()
+
+                <div class="rg-field">
+                    <label asp-for="UsernameOrEmail" class="rg-label"></label>
+                    <input asp-for="UsernameOrEmail"
+                           class="rg-input"
+                           placeholder="john_doe or john@example.com"
+                           autocomplete="username" />
+                    <span asp-validation-for="UsernameOrEmail" class="field-validation-error"></span>
+                </div>
+
+                <div class="rg-field">
+                    <label asp-for="Password" class="rg-label"></label>
+                    <div class="rg-input-wrap">
+                        <input asp-for="Password"
+                               class="rg-input"
+                               placeholder="Your password"
+                               autocomplete="current-password"
+                               id="passwordInput" />
+                        <span class="rg-eye" onclick="togglePassword()">&#9679;</span>
+                    </div>
+                    <span asp-validation-for="Password" class="field-validation-error"></span>
+                </div>
+
+                <button type="submit" class="rg-btn">Sign in &rarr;</button>
+            </form>
+
+            <p class="rg-footer">
+                Don't have an account?
+                <a asp-action="Register" asp-controller="Auth">Create one</a>
+            </p>
+
+            <p class="rg-footer" style="margin-top: 0.5rem;">
+                <a asp-action="ForgotPassword" asp-controller="Auth">Forgot password?</a>
+            </p>
+
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script>
+        function togglePassword() {
+            const input = document.getElementById('passwordInput');
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+    </script>
+
+</body>
+</html>
