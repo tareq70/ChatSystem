@@ -20,6 +20,8 @@ namespace ChatSystem.Application.Interfaces
         IGenericRepository<Message> Messages { get; }
 
         IGenericRepository<Notification> Notifications { get; }
+        IGenericRepository<MessageRead> MessageReads { get; }
+        IGenericRepository<Group> Groups { get; } 
 
         Task<int> SaveAsync();
     }

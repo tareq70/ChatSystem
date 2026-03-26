@@ -21,8 +21,9 @@ namespace ChatSystem.Infrastructure.Data
         public DbSet<Chat> Chats { get; set; }
         public DbSet<ChatUser> ChatUsers { get; set; }
         public DbSet<Message> Messages { get; set; }
-        public DbSet<Notification> Notifications { get; set; }  
-
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<MessageRead> MessageReads { get; set; }
+        public DbSet<Group> Groups { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -49,6 +50,10 @@ namespace ChatSystem.Infrastructure.Data
             modelBuilder.Entity<Friend>()
                 .Property(f => f.UserStatus)
                 .HasConversion<int>();
+
+            modelBuilder.Entity<Chat>()
+            .Property(c => c.Type)
+            .HasConversion<int>();
 
             // FriendRequests relationships
             modelBuilder.Entity<FriendRequest>()
@@ -108,6 +113,30 @@ namespace ChatSystem.Infrastructure.Data
                 .WithMany()
                 .HasForeignKey(n => n.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<MessageRead>()
+                .HasOne<Message>()
+                .WithMany(m => m.Reads)
+                .HasForeignKey(mr => mr.MessageId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<MessageRead>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(mr => mr.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // prevent duplicate reads
+            modelBuilder.Entity<MessageRead>()
+                .HasIndex(mr => new { mr.MessageId, mr.UserId })
+                .IsUnique();
+            // Group relationships
+            modelBuilder.Entity<Group>()
+                .HasOne<Chat>()
+                .WithOne()
+                .HasForeignKey<Group>(g => g.ChatId)
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

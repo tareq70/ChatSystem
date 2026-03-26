@@ -1,0 +1,169 @@
+﻿@using ChatSystem.Application.DTOs.chating
+@using ChatSystem.Core.Enums
+@model IEnumerable<ChatSummaryDto>
+@{
+    Layout = "~/Views/Shared/_AppLayout.cshtml";
+    ViewData["Title"] = "Messages";
+}
+
+@section Styles {
+    <style>
+        .chat-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .chat-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: inherit;
+            transition: background .15s;
+        }
+
+            .chat-item:hover {
+                background: var(--bs-secondary-bg);
+            }
+
+        .avatar-wrap {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .chat-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .online-dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: #22c55e;
+            border: 2px solid var(--bs-body-bg);
+            position: absolute;
+            bottom: 1px;
+            right: 1px;
+        }
+
+        .group-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            object-fit: cover;
+            background: var(--bs-secondary-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .chat-name {
+            font-weight: 500;
+            font-size: .93rem;
+        }
+
+        .chat-preview {
+            font-size: .81rem;
+            color: var(--bs-secondary-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+
+        .unread-badge {
+            background: #3b82f6;
+            color: #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: .72rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+    </style>
+}
+
+<div class="container py-4" style="max-width:680px">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-semibold mb-0">Messages</h5>
+        <a href="@Url.Action("CreateGroup", "Chat")" class="btn btn-sm btn-outline-primary">
+            <i class="bi bi-people-fill me-1"></i>New Group
+        </a>
+    </div>
+
+    <div class="chat-list">
+        @foreach (var chat in Model)
+        {
+            var href = chat.Type == ChatType.Private
+            ? Url.Action("Open", "Chat", new { friendId = chat.FriendId })
+            : Url.Action("Group", "Chat", new { chatId = chat.ChatId });
+
+            <a href="@href" class="chat-item">
+                <div class="avatar-wrap">
+                    @if (chat.Type == ChatType.Private)
+                    {
+                        <img class="chat-avatar"
+                             src="@(chat.FriendImage ?? $"https://ui-avatars.com/api/?name={chat.FriendName}&background=random")"
+                             alt="@chat.FriendName" />
+                        @if (chat.FriendStatus == UserStatus.Online)
+                        {
+                            <span class="online-dot"></span>
+                        }
+                    }
+                    else
+                    {
+                        @if (chat.GroupImage != null)
+                        {
+                            <img class="chat-avatar" style="border-radius:14px" src="@chat.GroupImage" alt="@chat.GroupName" />
+                        }
+                        else
+                        {
+
+                            <div class="group-icon">👥</div>
+                        }
+                    }
+                </div>
+
+                <div class="flex-grow-1 overflow-hidden">
+                    <div class="chat-name">
+                        @(chat.Type == ChatType.Private ? chat.FriendName : chat.GroupName)
+                        @if (chat.Type == ChatType.Group)
+                        {
+                            <span class="badge bg-secondary-subtle text-secondary-emphasis ms-1" style="font-size:.68rem">Group</span>
+                        }
+                    </div>
+                    <div class="chat-preview">@(chat.LastMessage ?? "No messages yet")</div>
+                </div>
+
+                <div class="d-flex flex-column align-items-end gap-1">
+                    @if (chat.LastMessageAt.HasValue)
+                    {
+                        <small class="text-muted" style="font-size:.75rem">@chat.LastMessageAt.Value.ToString("hh:mm tt")</small>
+                    }
+                    @if (chat.UnreadCount > 0)
+                    {
+                        <span class="unread-badge">@(chat.UnreadCount > 9 ? "9+" : chat.UnreadCount)</span>
+                    }
+                </div>
+            </a>
+        }
+
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5 text-muted">
+                <i class="bi bi-chat-dots fs-1 d-block mb-2"></i>
+                No conversations yet. Message a friend!
+            </div>
+        }
+    </div>
+</div>

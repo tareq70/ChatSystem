@@ -22,6 +22,8 @@ namespace ChatSystem.Infrastructure.UnitOfWork
             ChatUsers = new GenericRepository<ChatUser>(_context);
             Messages = new GenericRepository<Message>(_context);
             Notifications = new GenericRepository<Notification>(_context);
+            MessageReads = new GenericRepository<MessageRead>(_context);
+            Groups = new GenericRepository<Group>(_context);
         }
       
         public IGenericRepository<User> Users { get; private set; }
@@ -38,6 +40,9 @@ namespace ChatSystem.Infrastructure.UnitOfWork
 
         public IGenericRepository<Notification> Notifications { get; private set; }
 
+        public IGenericRepository<MessageRead> MessageReads { get; private set;  }
+
+        public IGenericRepository<Group> Groups {  get; private set; }
 
         public async Task<int> SaveAsync()
         {

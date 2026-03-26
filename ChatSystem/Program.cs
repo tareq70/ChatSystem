@@ -73,6 +73,11 @@ builder.Services.AddScoped<IUserSearchService, UserSearchService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IFriendRequestService, FriendRequestService>();
 builder.Services.AddScoped<IFriendsService, FriendsService>();
+builder.Services.AddScoped<IChatService, ChatService>();
+builder.Services.AddScoped<IGroupService, GroupService>();
+builder.Services.AddScoped<IFileUploadService, FileUploadService>();
+
+
 
 var app = builder.Build();
 
@@ -104,4 +109,5 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 app.MapHub<PresenceHub>("/hubs/presence");
+app.MapHub<ChatHub>("/hubs/chat");
 app.Run();
