@@ -476,7 +476,7 @@
                 <div class="text-muted" style="font-size:.75rem">
                     @(friendStatus == UserStatus.Online ? "🟢 Online" : "⚫ Offline")
                 </div>
-                <a href="@Url.Action("ShowProfile", "Profile", new { id = friendId })"
+                <a href="@Url.Action("ShowProfile", "Search", new { id = friendId })"
                    class="btn btn-sm btn-outline-secondary mt-2 w-100"
                    style="font-size:.8rem">
                     <i class="bi bi-person me-1"></i>View Profile
@@ -528,7 +528,7 @@
                         @(friendStatus == UserStatus.Online ? "Online" : "Offline")
                     </div>
                 </div>
-                <a href="@Url.Action("ShowProfile", "Profile", new { id = friendId })"
+                <a href="@Url.Action("ShowProfile", "Search", new { id = friendId })"
                    class="btn btn-sm btn-outline-secondary ms-auto"
                    style="font-size:.78rem">
                     <i class="bi bi-person me-1"></i>View Profile

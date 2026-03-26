@@ -43,7 +43,7 @@ namespace ChatSystem.Controllers
         }
 
         // ────────────────── Private chat ──────────────────
-        [HttpGet]
+        [HttpGet("Chat/Open/{friendId}")]
         public async Task<IActionResult> Open(string friendId)
         {
             var blocked = await _friendService.IsBlockedAsync(CurrentUserId, friendId);
@@ -55,7 +55,6 @@ namespace ChatSystem.Controllers
                 var messages = await _chatService.GetMessagesAsync(chatId, CurrentUserId);
                 await _chatService.MarkMessagesAsReadAsync(chatId, CurrentUserId);
 
-                // ← ضيف الـ friend info
                 var friend = await _userManager.FindByIdAsync(friendId);
                 ViewBag.FriendName = friend?.UserName ?? "Unknown";
                 ViewBag.FriendImage = friend?.ProfileImage;
